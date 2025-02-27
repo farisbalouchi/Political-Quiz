@@ -5,14 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Political Ideology Finder</title>
     <style>
-        body {
+        /* Base styles */
+        * {
+            box-sizing: border-box;
             margin: 0;
+            padding: 0;
+        }
+        
+        body {
             font-family: Arial, sans-serif;
             color: rgb(19, 19, 19);
             text-align: center;
-            overflow-x: hidden; /* Only hide horizontal overflow */
+            overflow-x: hidden;
             position: relative;
-            background-color: #000; /* Dark background as fallback */
+            background-color: #000;
             min-height: 100vh;
         }
 
@@ -24,8 +30,8 @@
             background: url('https://source.unsplash.com/1920x1080/?milkyway,stars,galaxy') no-repeat center center;
             background-size: cover;
             animation: moveStars 100s linear infinite;
-            z-index: -2; /* Ensure the stars are behind the content */
-            opacity: 0.8; /* Slightly dim the background */
+            z-index: -2;
+            opacity: 0.8;
         }
 
         /* Stars and planets animation */
@@ -35,7 +41,7 @@
             border-radius: 50%;
             opacity: 0.8;
             animation: twinkle 2s infinite alternate;
-            z-index: -1; /* Ensure stars don't interfere with clickable elements */
+            z-index: -1;
         }
 
         .planet {
@@ -43,11 +49,11 @@
             background-color: #1DA1F2;
             border-radius: 50%;
             animation: rotatePlanet 10s infinite linear;
-            z-index: -1; /* Ensure planets stay behind the content */
-            box-shadow: 0 0 15px rgba(29, 161, 242, 0.7); /* Add glow to planets */
+            z-index: -1;
+            box-shadow: 0 0 15px rgba(29, 161, 242, 0.7);
         }
 
-        /* Keyframes for stars and planets animation */
+        /* Keyframes for animations */
         @keyframes moveStars {
             0% { background-position: 0% 0%; }
             100% { background-position: 100% 100%; }
@@ -63,58 +69,66 @@
             100% { transform: translateX(-50%) rotate(360deg); }
         }
 
-        /* Header and content styling */
+        /* Header and navigation */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
+            padding: 15px 10px;
             background: rgba(2, 104, 236, 0.7);
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             position: relative;
             z-index: 1;
             color: aliceblue;
+            flex-wrap: wrap;
         }
 
         .header-title {
-            font-size: 36px;
+            font-size: clamp(20px, 5vw, 36px);
             font-weight: bold;
             flex-grow: 1;
             text-align: center;
+            width: 100%;
+            order: -1;
+            margin-bottom: 10px;
         }
 
         .nav-buttons {
             display: flex;
-            gap: 15px;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .nav-button {
-            padding: 8px 15px;
+            padding: 8px 12px;
             background: rgba(29, 161, 242, 0.6);
             color: white;
             text-decoration: none;
-            font-size: 16px;
+            font-size: clamp(14px, 3vw, 16px);
             border-radius: 3px;
             transition: all 0.3s ease;
             border: none;
+            white-space: nowrap;
         }
 
-        .nav-button:hover {
+        .nav-button:hover, .nav-button:focus {
             background: rgba(29, 161, 242, 0.9);
             transform: translateY(-2px);
         }
 
+        /* Main content */
         .content {
-            width: 80%;
+            width: 90%;
             max-width: 800px;
-            margin: 0 auto 50px auto;
-            padding: 30px;
+            margin: 0 auto 70px auto;
+            padding: 20px;
             background: rgba(0, 0, 0, 0.8);
             border-radius: 15px;
             box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
             position: relative;
-            z-index: 1; /* Ensure the content is above the background */
-            color: white; /* Make text visible on dark background */
+            z-index: 1;
+            color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -123,10 +137,10 @@
         }
 
         .start-button {
-            padding: 20px 40px;
+            padding: clamp(15px, 4vw, 20px) clamp(20px, 6vw, 40px);
             background: #1DA1F2;
             color: white;
-            font-size: 24px;
+            font-size: clamp(18px, 4vw, 24px);
             border: none;
             border-radius: 12px;
             cursor: pointer;
@@ -134,29 +148,31 @@
             margin-top: 20px;
             box-shadow: 0 4px 15px rgba(29, 161, 242, 0.5);
             text-decoration: none;
+            text-align: center;
+            width: fit-content;
         }
 
-        .start-button:hover {
+        .start-button:hover, .start-button:focus {
             background: #0d8ecf;
             transform: translateY(-5px);
             box-shadow: 0 8px 20px rgba(29, 161, 242, 0.7);
         }
 
         .description {
-            font-size: 20px;
+            font-size: clamp(16px, 3vw, 20px);
             margin-bottom: 30px;
             line-height: 1.6;
             max-width: 600px;
         }
 
-        /* Political Text Animation Styles */
+        /* Political ticker */
         .political-ticker {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
             background: rgba(0, 0, 0, 0.8);
-            padding: 15px 0;
+            padding: 10px 0;
             overflow: hidden;
             z-index: 10;
         }
@@ -169,47 +185,31 @@
 
         .ticker-item {
             display: inline-block;
-            padding: 0 50px;
-            font-size: 18px;
+            padding: 0 30px;
+            font-size: clamp(12px, 3vw, 18px);
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .left {
-            color: #3498db; /* Blue for left-leaning quotes */
-        }
-
-        .right {
-            color: #e74c3c; /* Red for right-leaning quotes */
-        }
-
-        .center {
-            color: #9b59b6; /* Purple for centrist quotes */
-        }
+        .left { color: #3498db; }
+        .right { color: #e74c3c; }
+        .center { color: #9b59b6; }
 
         @keyframes ticker {
-            0% {
-                transform: translateX(100%);
-            }
-            100% {
-                transform: translateX(-100%);
-            }
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
         }
 
         /* Text animation effects */
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-
-        .glow {
+        .pulse { animation: pulse 2s infinite; }
+        
+        .glow { 
             text-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
             animation: glow 2s infinite alternate;
         }
-
-        .shake {
-            animation: shake 0.5s infinite;
-        }
+        
+        .shake { animation: shake 0.5s infinite; }
 
         @keyframes pulse {
             0% { opacity: 1; }
@@ -230,7 +230,7 @@
             100% { transform: translateX(0); }
         }
 
-        /* Modal styles for the pages */
+        /* Modal styles */
         .modal {
             display: none;
             position: fixed;
@@ -245,14 +245,16 @@
 
         .modal-content {
             background-color: rgba(10, 30, 60, 0.95);
-            margin: 5% auto;
-            padding: 30px;
+            margin: 10% auto;
+            padding: 20px;
             border-radius: 15px;
-            width: 80%;
+            width: 90%;
             max-width: 800px;
             color: white;
             box-shadow: 0 0 25px rgba(29, 161, 242, 0.5);
             position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
         }
 
         .close-button {
@@ -262,45 +264,95 @@
             font-weight: bold;
             cursor: pointer;
             transition: color 0.3s;
+            padding: 0 10px;
         }
 
-        .close-button:hover {
+        .close-button:hover, .close-button:focus {
             color: white;
+        }
+
+        /* Media queries for responsive design */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                padding: 10px 5px;
+            }
+            
+            .nav-buttons {
+                width: 100%;
+                justify-content: center;
+                margin: 5px 0;
+            }
+            
+            .content {
+                width: 95%;
+                padding: 15px;
+                margin-bottom: 60px;
+            }
+            
+            .modal-content {
+                margin: 15% auto;
+                padding: 15px;
+                width: 95%;
+            }
+            
+            .ticker-item {
+                padding: 0 15px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .header {
+                flex-direction: row;
+            }
+            
+            .header-title {
+                width: auto;
+                order: 0;
+                margin-bottom: 0;
+            }
+        }
+
+        /* Accessibility improvements */
+        button, a {
+            touch-action: manipulation;
+        }
+
+        :focus {
+            outline: 2px solid #1DA1F2;
+            outline-offset: 2px;
         }
     </style>
 </head>
 <body>
-    <div class="stars"></div> <!-- Stars background -->
+    <div class="stars"></div>
     
-    <!-- Header with navigation buttons -->
-    <div class="header">
+    <header class="header">
         <div class="nav-buttons">
             <a href="index.html" class="nav-button">Home</a>
-            <a href="#" class="nav-button" onclick="openModal('contact-modal')">Contact Us</a>
+            <a href="#" class="nav-button" onclick="openModal('contact-modal')">Contact</a>
         </div>
         <div class="header-title">Political Ideology Finder</div>
         <div class="nav-buttons">
             <a href="#" class="nav-button" onclick="openModal('sources-modal')">Sources</a>
             <a href="#" class="nav-button" onclick="openModal('creator-modal')">Creator</a>
         </div>
-    </div>
+    </header>
     
-    <div class="content">
+    <main class="content">
         <p class="description">Discover where you stand on the political spectrum by answering a series of thought-provoking questions about society, governance, and economics.</p>
-        <a href="test.html" class="start-button">Take the test to determine where you lie on the political landscape</a>
-    </div>
+        <a href="test.html" class="start-button">Take the Test</a>
+    </main>
     
-    <!-- Political Text Animation -->
     <div class="political-ticker">
         <div class="ticker-content" id="ticker-content">
             <!-- Ticker items will be added dynamically -->
         </div>
     </div>
     
-    <!-- Modal for Contact Us -->
     <div id="contact-modal" class="modal">
         <div class="modal-content">
-            <span class="close-button" onclick="closeModal('contact-modal')">&times;</span>
+            <span class="close-button" onclick="closeModal('contact-modal')" tabindex="0" role="button" aria-label="Close">&times;</span>
             <h2>Contact Us</h2>
             <p>Have questions or feedback about the Political Ideology Finder? We'd love to hear from you!</p>
             <p>Email: <a href="mailto:contact@politicalideologyfinder.com" style="color: #1DA1F2;">contact@politicalideologyfinder.com</a></p>
@@ -309,13 +361,12 @@
         </div>
     </div>
     
-    <!-- Modal for Sources -->
     <div id="sources-modal" class="modal">
         <div class="modal-content">
-            <span class="close-button" onclick="closeModal('sources-modal')">&times;</span>
+            <span class="close-button" onclick="closeModal('sources-modal')" tabindex="0" role="button" aria-label="Close">&times;</span>
             <h2>Sources & References</h2>
             <p>The Political Ideology Finder is based on research from various political science resources:</p>
-            <ul style="text-align: left;">
+            <ul style="text-align: left; padding-left: 20px;">
                 <li>Adorno, T. W., Frenkel-Brunswik, E., Levinson, D. J., & Sanford, R. N. (1950). <em>The Authoritarian Personality</em>.</li>
                 <li>Altemeyer, B. (1981). <em>Right-Wing Authoritarianism</em>.</li>
                 <li>Haidt, J. (2012). <em>The Righteous Mind: Why Good People Are Divided by Politics and Religion</em>.</li>
@@ -326,10 +377,9 @@
         </div>
     </div>
     
-    <!-- Modal for Creator -->
     <div id="creator-modal" class="modal">
         <div class="modal-content">
-            <span class="close-button" onclick="closeModal('creator-modal')">&times;</span>
+            <span class="close-button" onclick="closeModal('creator-modal')" tabindex="0" role="button" aria-label="Close">&times;</span>
             <h2>About the Creator</h2>
             <p>The Political Ideology Finder was created by the one and only Faris Balouchi.</p>
             <p>Our mission is to provide an accessible, engaging way for individuals to explore where they stand on the political spectrum without bias or judgment.</p>
@@ -339,18 +389,20 @@
     </div>
     
     <script>
-        // Fisher-Yates shuffle algorithm to randomize arrays
+        // Fisher-Yates shuffle algorithm
         function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
             }
-            return array;
+            return newArray;
         }
 
         // Create stars and planets
         function createStars() {
-            for (let i = 0; i < 100; i++) {
+            const starCount = window.innerWidth < 768 ? 50 : 100;
+            for (let i = 0; i < starCount; i++) {
                 const star = document.createElement("div");
                 star.classList.add("star");
                 star.style.width = Math.random() * 3 + "px";
@@ -362,10 +414,11 @@
         }
 
         function createPlanets() {
+            const planetSize = window.innerWidth < 768 ? 30 : 50;
             const planet = document.createElement("div");
             planet.classList.add("planet");
-            planet.style.width = "50px";
-            planet.style.height = "50px";
+            planet.style.width = planetSize + "px";
+            planet.style.height = planetSize + "px";
             planet.style.top = "30%";
             planet.style.left = "50%";
             planet.style.animationDuration = "20s";
@@ -392,21 +445,17 @@
             { text: "Progress through pragmatism", class: "center glow" }
         ];
 
-        // Initialize the political ticker with randomized quotes
+        // Initialize the political ticker
         function initPoliticalTicker() {
             const tickerContent = document.getElementById("ticker-content");
+            const shuffledStatements = shuffleArray(politicalStatements);
             
-            // Shuffle the political statements array
-            const shuffledStatements = shuffleArray([...politicalStatements]);
-            
-            // Add each statement to the ticker
             shuffledStatements.forEach(statement => {
                 const tickerItem = document.createElement("span");
                 tickerItem.classList.add("ticker-item");
-                tickerItem.classList.add(statement.class.split(" ")[0]); // Add left/right/center class
                 
-                // Add animation classes if present
                 const classes = statement.class.split(" ");
+                tickerItem.classList.add(classes[0]);
                 if (classes.length > 1) {
                     tickerItem.classList.add(classes[1]);
                 }
@@ -419,13 +468,14 @@
         // Modal functions
         function openModal(modalId) {
             document.getElementById(modalId).style.display = "block";
+            document.querySelector(`#${modalId} .close-button`).focus();
         }
 
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = "none";
         }
 
-        // Close modal when clicking outside of it
+        // Close modal when clicking outside or pressing Escape
         window.onclick = function(event) {
             const modals = document.getElementsByClassName('modal');
             for (let i = 0; i < modals.length; i++) {
@@ -435,12 +485,44 @@
             }
         }
 
-        // Initialize stars and planets
-        createStars();
-        createPlanets();
-        initPoliticalTicker();
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                const modals = document.getElementsByClassName('modal');
+                for (let i = 0; i < modals.length; i++) {
+                    if (modals[i].style.display === "block") {
+                        modals[i].style.display = "none";
+                    }
+                }
+            }
+        });
+
+        // Make close buttons keyboard accessible
+        document.querySelectorAll('.close-button').forEach(button => {
+            button.addEventListener('keydown', function(event) {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    const modalId = this.closest('.modal').id;
+                    closeModal(modalId);
+                }
+            });
+        });
+
+        // Initialize everything
+        window.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            createPlanets();
+            initPoliticalTicker();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                // Remove existing stars and planets
+                document.querySelectorAll('.star, .planet').forEach(el => el.remove());
+                // Create new ones sized appropriately
+                createStars();
+                createPlanets();
+            });
+        });
     </script>
 </body>
 </html>
-
 
