@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Political Ideology Test</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: rgb(19, 19, 19);
+            text-align: center;
+            overflow-x: hidden;
+            position: relative;
+            background-color: #000;
+            min-height: 100vh;
+        }
+
+        .stars {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: url('https://source.unsplash.com/1920x1080/?milkyway,stars,galaxy') no-repeat center center;
+            background-size: cover;
+            animation: moveStars 100s linear infinite;
+            z-index: -2;
+            opacity: 0.8;
+        }
+
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: twinkle 2s infinite alternate;
+            z-index: -1;
+        }
+
+        .planet {
+            position: absolute;
+            background-color: #1DA1F2;
+            border-radius: 50%;
+            animation: rotatePlanet 10s infinite linear;
+            z-index: -1;
+            box-shadow: 0 0 15px rgba(29, 161, 242, 0.7);
+        }
+
+        @keyframes moveStars {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.4; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        @keyframes rotatePlanet {
+            0% { transform: translateX(-50%) rotate(0deg); }
+            100% { transform: translateX(-50%) rotate(360deg); }
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: rgba(2, 104, 236, 0.7);
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+            color: aliceblue;
+        }
+
+        .header-title {
+            font-size: 36px;
+            font-weight: bold;
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-button {
+            padding: 8px 15px;
+            background: rgba(29, 161, 242, 0.6);
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .nav-button:hover {
+            background: rgba(29, 161, 242, 0.9);
+            transform: translateY(-2px);
+        }
+
+        .content {
+            width: 80%;
+            max-width: 800px;
+            margin: 0 auto 50px auto;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 1;
+            color: white;
+        }
+
+        .question {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            padding: 15px;
+            background: #1DA1F2;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            background: #cde1f0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(29, 161, 242, 0.4);
+        }
+
+        .bot-response {
+            margin-top: 15px;
+            font-style: italic;
+            color: #bbb;
+        }
+
+        .political-ticker {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px 0;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .ticker-content {
+            display: flex;
+            white-space: nowrap;
+            animation: ticker 60s linear infinite;
+        }
+
+        .ticker-item {
+            display: inline-block;
+            padding: 0 50px;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .left { color: #3498db; }
+        .right { color: #e74c3c; }
+        .center { color: #9b59b6; }
+
+        @keyframes ticker {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .pulse { animation: pulse 2s infinite; }
+        .glow { 
+            text-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+            animation: glow 2s infinite alternate;
+        }
+        .shake { animation: shake 0.5s infinite; }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 5px currentColor, 0 0 10px currentColor; }
+            to { text-shadow: 0 0 10px currentColor, 0 0 20px currentColor; }
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            50% { transform: translateX(0); }
+            75% { transform: translateX(2px); }
+            100% { transform: translateX(0); }
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #555;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .back-button:hover { background: #777; }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: rgba(10, 30, 60, 0.95);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 800px;
+            color: white;
+            box-shadow: 0 0 25px rgba(29, 161, 242, 0.5);
+            position: relative;
+        }
+
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-button:hover { color: white; }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    
+    <div class="header">
+        <div class="nav-buttons">
+            <a href="index.html" class="nav-button">Home</a>
+            <a href="#" class="nav-button" onclick="openModal('contact-modal')">Contact Us</a>
+        </div>
+        <div class="header-title">Political Ideology Finder</div>
+        <div class="nav-buttons">
+            <a href="#" class="nav-button" onclick="openModal('sources-modal')">Sources</a>
+            <a href="#" class="nav-button" onclick="openModal('creator-modal')">Creator</a>
+        </div>
+    </div>
+    
+    <div class="content">
+        <div id="question-container">
+            <p class="question" id="question-text">Loading question...</p>
+            <div class="options" id="options-container"></div>
+            <p class="bot-response" id="bot-response"></p>
+        </div>
+    </div>
+    
+    <div class="political-ticker">
+        <div class="ticker-content" id="ticker-content">
+            <!-- Ticker items will be added dynamically -->
+        </div>
+    </div>
+    
+    <div id="contact-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('contact-modal')">&times;</span>
+            <h2>Contact Us</h2>
+            <p>Have questions or feedback about the Political Ideology Finder? We'd love to hear from you!</p>
+            <p>Email: <a href="mailto:contact@politicalideologyfinder.com" style="color: #1DA1F2;">contact@politicalideologyfinder.com</a></p>
+            <p>Twitter: <a href="https://twitter.com/poliideofinder" style="color: #1DA1F2;">@poliideofinder</a></p>
+            <p>Reddit: <a href="https://reddit.com/r/politicalideologyfinder" style="color: #1DA1F2;">r/politicalideologyfinder</a></p>
+        </div>
+    </div>
+    
+    <div id="sources-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('sources-modal')">&times;</span>
+            <h2>Sources & References</h2>
+            <p>The Political Ideology Finder is based on research from various political science resources:</p>
+            <ul style="text-align: left;">
+                <li>Adorno, T. W., Frenkel-Brunswik, E., Levinson, D. J., & Sanford, R. N. (1950). <em>The Authoritarian Personality</em>.</li>
+                <li>Altemeyer, B. (1981). <em>Right-Wing Authoritarianism</em>.</li>
+                <li>Haidt, J. (2012). <em>The Righteous Mind: Why Good People Are Divided by Politics and Religion</em>.</li>
+                <li>Lakoff, G. (2002). <em>Moral Politics: How Liberals and Conservatives Think</em>.</li>
+                <li>Pew Research Center. (2021). <em>Political Typology Quiz</em>.</li>
+            </ul>
+            <p>The questions in this test are designed to measure your political leanings across multiple dimensions.</p>
+        </div>
+    </div>
+    
+    <div id="creator-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal('creator-modal')">&times;</span>
+            <h2>About the Creator</h2>
+            <p>The Political Ideology Finder was created by a team of political science enthusiasts and web developers passionate about helping people understand their political beliefs.</p>
+            <p>Our mission is to provide an accessible, engaging way for individuals to explore where they stand on the political spectrum without bias or judgment.</p>
+            <p>This tool is continuously being improved based on user feedback and evolving political science research.</p>
+            <p>Special thanks to all contributors who have helped refine the questions and improve the algorithm.</p>
+        </div>
+    </div>
+   
+    <script>
+        // Questions data
+        const questions = [
+            { text: "Should freedom of speech include hate speech?", options: ["Yes", "No", "Neutral"] },
+            { text: "Should governments impose heavy regulations on social media?", options: ["Yes", "No", "Neutral"] },
+            { text: "Is a benevolent dictatorship better than a corrupt democracy?", options: ["Yes", "No", "Neutral"] },
+            { text: "Should prisoners be allowed to vote?", options: ["Yes", "No", "Neutral"] },
+            { text: "Should AI be allowed to make major governmental decisions?", options: ["Yes", "No", "Neutral"] },
+            { text: "Would you sacrifice privacy for national security?", options: ["Yes", "No", "Neutral"] },
+            { text: "Should billionaires exist in a world with poverty?", options: ["Yes", "No", "Neutral"] },
+            { text: "Is universal healthcare worth increased taxation?", options: ["Yes", "No", "Neutral"] },
+            { text: "Should education be prioritized over military funding?", options: ["Yes", "No", "Neutral"] },
+            { text: "Is there ever a justified reason for government censorship?", options: ["Yes", "No", "Neutral"] }
+        ];
+        
+        // Political statements for ticker
+        const politicalStatements = [
+            { text: "Liberty without equality is privilege", class: "left glow" },
+            { text: "Those who say communism has blood on its hands have not read the history of capitalism", class: "right pulse" },
+            { text: "Compromise is not surrender", class: "center" },
+            { text: "Healthcare is a human right", class: "left shake" },
+            { text: "Lower taxes, smaller government", class: "right glow" },
+            { text: "Unity in diversity", class: "center pulse" },
+            { text: "Equality of opportunity, not outcome", class: "right" },
+            { text: "People over profits", class: "left glow" },
+            { text: "Individual responsibility does not mean shit when the reason my room is dirty is precisely how society is messed up - Slavoj Zizek", class: "right pulse" },
+            { text: "Democracy requires participation", class: "center shake" },
+            { text: "The fruits of the earth belong to everybody but the earth itself to nobody - Jean Jacque Roussoue", class: "left" },
+            { text: "No human being is an illegal", class: "right glow" },
+            { text: "Facts over ideology", class: "center pulse" },
+            { text: "Stand against censorship", class: "left shake" },
+            { text: "Protect constitutional rights", class: "right" },
+            { text: "Progress through pragmatism", class: "center glow" }
+        ];
+        
+        // Global variables
+        let currentQuestionIndex = 0;
+        let leftScore = 0, rightScore = 0;
+        let shuffledQuestions = [];
+        
+        // Fisher-Yates shuffle algorithm
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+        
+        // Show current question
+        function showQuestion() {
+            if (currentQuestionIndex >= shuffledQuestions.length) {
+                showResult();
+                return;
+            }
+
+            document.getElementById("bot-response").innerText = "";
+            const question = shuffledQuestions[currentQuestionIndex];
+            document.getElementById("question-text").innerText = question.text;
+            const optionsContainer = document.getElementById("options-container");
+            optionsContainer.innerHTML = "";
+
+            question.options.forEach(option => {
+                const button = document.createElement("button");
+                button.classList.add("option");
+                button.innerText = option;
+                button.onclick = () => handleAnswer(option);
+                optionsContainer.appendChild(button);
+            });
+        }
+        
+        // Handle answer selection
+        function handleAnswer(option) {
+            if (option === "Yes") leftScore++;
+            if (option === "No") rightScore++;
+
+            document.getElementById("bot-response").innerText = getBotResponse();
+            setTimeout(() => {
+                currentQuestionIndex++;
+                showQuestion();
+            }, 1000);
+        }
+        
+        // Get random bot response
+        function getBotResponse() {
+            const responses = ["Huh, good answer.", "Interesting choice!", "That one's tricky!", "I see where you're coming from.", "Not bad!", "That's a dilemma, isn't it?", "Deep thoughts!"];
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+        
+        // Show final result
+        function showResult() {
+            let result = "Center";
+            if (leftScore > rightScore) result = "Left-leaning";
+            if (rightScore > leftScore) result = "Right-leaning";
+            document.getElementById("question-container").innerHTML = `
+                <h2>Your Political Alignment: ${result}</h2>
+                <a href="index.html" class="back-button">Back to Home</a>
+            `;
+        }
+        
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = document.getElementsByClassName('modal');
+            for (let i = 0; i < modals.length; i++) {
+                if (event.target == modals[i]) {
+                    modals[i].style.display = "none";
+                }
+            }
+        }
+        
+        // Create stars background
+        function createStars() {
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement("div");
+                star.classList.add("star");
+                star.style.width = Math.random() * 3 + "px";
+                star.style.height = star.style.width;
+                star.style.top = Math.random() * window.innerHeight + "px";
+                star.style.left = Math.random() * window.innerWidth + "px";
+                document.body.appendChild(star);
+            }
+        }
+        
+        // Create planets
+        function createPlanets() {
+            const planet = document.createElement("div");
+            planet.classList.add("planet");
+            planet.style.width = "50px";
+            planet.style.height = "50px";
+            planet.style.top = "30%";
+            planet.style.left = "50%";
+            planet.style.animationDuration = "20s";
+            document.body.appendChild(planet);
+        }
+        
+        // Initialize ticker
+        function initPoliticalTicker() {
+            const tickerContent = document.getElementById("ticker-content");
+            const shuffledStatements = shuffleArray(politicalStatements);
+            
+            shuffledStatements.forEach(statement => {
+                const tickerItem = document.createElement("span");
+                tickerItem.classList.add("ticker-item");
+                
+                const classes = statement.class.split(" ");
+                tickerItem.classList.add(classes[0]);
+                if (classes.length > 1) {
+                    tickerItem.classList.add(classes[1]);
+                }
+                
+                tickerItem.textContent = statement.text;
+                tickerContent.appendChild(tickerItem);
+            });
+        }
+        
+        // Initialize everything when page loads
+        window.onload = function() {
+            shuffledQuestions = shuffleArray(questions);
+            createStars();
+            createPlanets();
+            initPoliticalTicker();
+            showQuestion();
+        };
+    </script>
+</body>
+</html>
